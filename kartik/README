@@ -1,0 +1,37 @@
+curve(der_req)
+abstract class for all the curve classes
+der_req = derivatives required
+member_functions:
+  evaluate(u): It evaluates the curve at u
+  derivatives(u): It returns a numpy array with derivatives upto
+  der_req at ustored along the row. Note 0th derivative is func value.
+  plot_data(ax): It plots the curve. ax is a axes object.
+
+curve_object
+It creates a list of curves.
+member_functions:
+  add_beizer()
+  add_B_spline()
+  add_NURBS_curve()
+
+NURBS_curve(cp, weight, der_req=2, deg=3)
+cp = numpy array of control points. points are stored along the row. 
+weight = weight of these control points stored in numpy array.
+der_req = derivatives required
+deg = degree of NURBS curve
+
+beizer_curve(cp)
+cp = numpy array of control points. points are stored along the row. 
+
+ B_spline(cp, der_req=2, deg=3, show_cp = False)
+cp = numpy array of control points. points are stored along the row. 
+der_req = derivatives required
+deg = degree of NURBS curve
+show_cp = whether to plot control points or not
+
+line(cp, der_req = 1)
+cp is an array of two points through which line is to be passed
+
+circular_arc(cp, der_req = 1)
+cp is array of three points, starting, arbitary, ending point. arbitary
+point is any point between the start and end point.
