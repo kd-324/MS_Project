@@ -5,9 +5,9 @@ member_functions:
   evaluate(u): It evaluates the curve at u
   derivatives(u): It returns a numpy array with derivatives upto
   der_req at u stored along the row. Note 0th derivative is func value.
-  plot_data(ax): It plots the curve. ax is a axes object.
+  plot_data(ax): It plots the curve. ax is an axes object.
 
-curve_object
+curve_object()
 It creates a list of curves.
 member_functions:
   add_beizer()
