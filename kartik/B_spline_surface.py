@@ -1,3 +1,9 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt 
+from mpl_toolkits.mplot3d import Axes3D
+import pdb
+
 class B_spline_surface:
     def __init__(self, cp, n, m, deru=2, derv=2, deg1=3, deg2=3):
         self.degree1 = deg1
@@ -68,6 +74,18 @@ class B_spline_surface:
                 basis[deg] *= (u-knot[deg])/(knot[deg+i]-knot[deg])
         basis = basis[:,None]
         return [t0, basis]
+
+    def evaluate(self,  u):
+        [x0,basisX] = self.evaluate('x',u)
+        [y0,basisY] = self.evaluate('y',v)
+        sol = np.matmul(basisX,np.matmul(cp[:,x0-d1:x0+1,y0-d2:y0+1],basisY.T))
+        return sol
+
+    def evaluate_derivatives(self,  u, v):
+        [x0,basisX] = self.evaluate_basis_derivatives('x',u)
+        [y0,basisY] = self.evaluate_basis_derivatives('y',v)
+        sol = np.matmul(basisX,np.matmul(cp[:,x0-d1:x0+1,y0-d2:y0+1],basisY.T))
+        return sol
 
     def evaluate_basis_derivatives(self, dir, u):
         # direction selection
@@ -149,5 +167,17 @@ class B_spline_surface:
                 b = b+1
             a = a+1
         ax.plot_surface(new_data[0,0,0,:,:],new_data[1,0,0,:,:],new_data[2,0,0,:,:])
+        px = 60; py = 80;
+        val = new_data[:,0,0,px,py]
+        nu = new_data[:,1,0,px,py]; nv = new_data[:,0,1,px,py];
+        n = np.cross(nu,nv)
+        n /= np.linalg.norm(n)
+        nu /= np.linalg.norm(nu)
+        nv /= np.linalg.norm(nv)
+        line = np.zeros((3,2))
+        line[:,0] = val; line[:,1] = val+n;
+        ax.plot(line[0,:], line[1,:], line[2,:])
+        u,v = np.meshgrid(np.linspace(-0.5,0.5,101),np.linspace(-0.5,0.5,101))
+        ax.plot_surface(u+val[0],v+val[1],(-u*n[0]-v*n[1])/n[2]+val[2])
         
         plt.show()
