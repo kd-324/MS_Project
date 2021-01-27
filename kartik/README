@@ -4,7 +4,7 @@ der_req = derivatives required
 member_functions:
   evaluate(u): It evaluates the curve at u
   derivatives(u): It returns a numpy array with derivatives upto
-  der_req at ustored along the row. Note 0th derivative is func value.
+  der_req at u stored along the row. Note 0th derivative is func value.
   plot_data(ax): It plots the curve. ax is a axes object.
 
 curve_object
