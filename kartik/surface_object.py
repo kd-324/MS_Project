@@ -10,32 +10,23 @@ from B_spline_surface import *
 from NURBS_surface import *
 from NURBS_curve import *
 from curve import *
-from analytic_curves import *
 
-class curve_object():
+class surface_object():
 	def __init__(self):
-		self.curves = []
+		self.surfaces = []
 		self.kind = []
 
-	def add_beizer(self, cp):
-		self.curves.append(beizer_curves(cp))
-		self.kind.append('beizer')
-
-	def add_line(self, cp):
-		self.curves.append(line(cp))
-		self.kind.append('line')
-
-	def add_B_spline(self, cp, der_req=2, deg=3):
-		self.curves.append(B_spline(cp, der_req, deg))
+	def add_B_spline(self, cp, n, m, deru=2, derv=2, deg1=3, deg2=3):
+		self.surfaces.append(B_spline_surface(cp, n, m, deru, derv, deg1, deg2))
 		self.kind.append('B_spline')
 
-	def add_NURBS(self, cp, weight, der_req=2, deg=3):
-		self.curves.append(NURBS_curve(cp, weight, der_req, deg))
+	def add_NURBS(self, cp, weight, n, m, deru=2, derv=2, deg1=3, deg2=3):
+		self.surfaces.append(NURBS_curve(cp, weight, n, m, deru, derv, deg1, deg2))
 		self.kind.append('NURBS')
 
 	def plot_data(self):
 		fig = plt.figure()
 		ax = plt.axes(projection='3d')
-		for x in self.curves:
+		for x in self.surfaces:
 			x.plot_data(ax)
 		plt.show()

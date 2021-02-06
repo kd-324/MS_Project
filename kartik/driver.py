@@ -12,6 +12,8 @@ from NURBS_curve import *
 from curve import *
 from curve_object import *
 from analytic_curves import *
+from surface_object import *
+from analytic_surfaces import *
 
 def generate_circle():
 	a = np.zeros((25,3))
@@ -52,6 +54,7 @@ def gen2():
 	knt2 = np.linspace(0.1, 0.9, h-deg)
 	np.save('knot1.npy',knt1); np.save('knot2.npy',knt2)
 
+
 fig = plt.figure();ax = plt.axes(projection='3d')
 
 # b = NURBS_curve(np.load('helix.npy'), np.ones((1,15)));b.plot_data();plt.show()
@@ -63,8 +66,52 @@ fig = plt.figure();ax = plt.axes(projection='3d')
 # b.add_B_spline(np.load('circle_data.npy'))
 # b.plot_data()
 
-ar = np.array([[1,0,0], [1.4142,1.4142,0],[0,1,0]])
-b = circular_arc(ar)
-b.plot_data(ax)
-plt.show()
+# ar = np.array([[1,0,0], [1.4142,1.4142,0],[0,1,0]])
+# ar *= 100
+# b = circular_arc(np.array([[0,0,1], [0,1.4142,1.4142],[0,1,0]]));b.plot_data(ax);plt.show()
 
+# b = surface_object()
+# b.add_B_spline(np.load('circle_data.npy'),20,20)
+# b.plot_data()
+
+#plane
+# b = plane(np.array([1.,1.,1.]),np.array([2.,1.,3.]))
+# b.plot_data(ax)
+# plt.show()
+
+#cylinder
+# b = cylinder(5,5)
+# b.plot_data(ax)
+# plt.show()
+
+# rectangle curve
+# b = curve_object()
+# b.add_line(np.array([[0,0,0],[1,0,0]]))
+# b.add_line(np.array([[1,0,0],[1,1,0]]))
+# b.add_line(np.array([[1,1,0],[0,1,0]]))
+# b.add_line(np.array([[0,1,0],[0,0,0]]))
+# b.plot_data()
+
+# b = B_spline(ar)
+
+# b = SOR(circular_arc(np.array([[0,10,1], [0,11.4142,1.4142],[0,11,1]])))
+
+# surface of revolution
+# b = SOR(line(np.array([[1,1,1],[1,1,2]])))
+# ar = np.array([[0,1,1], [0,2,2],[0,3,2.5],[0,4,3]])
+# b = SOR(B_spline(ar))
+# b = B_spline(ar)
+# b.plot_data(ax)
+# plt.show()
+
+# 
+# b = curve1()
+# b.plot_data(ax)
+# plt.show()
+
+
+u = np.outer(np.linspace(0,1,101), np.ones(101)); v=u.T
+x = (u+1)*np.cos(np.pi/2*v); y = (u+1)*np.sin(np.pi/2*v); z = 0*u
+
+ax.plot_surface(x, y, z)
+plt.show()

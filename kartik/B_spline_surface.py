@@ -149,10 +149,7 @@ class B_spline_surface:
 
         return [t0,derivatives]
 
-    def plot_data(self,n=100, m=100):
-        fig = plt.figure()
-        ax = fig.add_subplot(111,projection='3d')
-        ax = plt.axes(projection='3d')  
+    def plot_data(self, ax, n=100, m=100):  
         cp = self.control_points; d1 = self.degree1; d2 = self.degree2
         new_data = np.zeros((3,self.der_requ+1, self.der_reqv+1,n+1,m+1))
         a = 0; b = 0
@@ -179,5 +176,3 @@ class B_spline_surface:
         ax.plot(line[0,:], line[1,:], line[2,:])
         u,v = np.meshgrid(np.linspace(-0.5,0.5,101),np.linspace(-0.5,0.5,101))
         ax.plot_surface(u+val[0],v+val[1],(-u*n[0]-v*n[1])/n[2]+val[2])
-        
-        plt.show()

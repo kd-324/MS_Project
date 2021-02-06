@@ -48,7 +48,7 @@ class nurbs_surface(B_spline_surface):
                 new_data[0:3,i,j] /= new_data[3,0,0]
         return new_data[0:3,:,:]
 
-    def plot_data(self,n=100, m=100):
+    def plot_data(self, ax, n=100, m=100):
         cp = self.control_points; d1 = self.degree1; d2 = self.degree2
         new_data = np.zeros((4,self.der_requ+1, self.der_reqv+1,n+1,m+1))
         a = 0; b = 0
@@ -81,9 +81,6 @@ class nurbs_surface(B_spline_surface):
                 new_data[0:3,i,j,:,:] /= new_data[3,0,0,:,:]
 
         # surface
-        fig = plt.figure()
-        ax = fig.add_subplot(111,projection='3d')
-        ax = plt.axes(projection='3d')
         ax.plot_surface(new_data[0,0,0,:,:],new_data[1,0,0,:,:],new_data[2,0,0,:,:])
         # return new_data
 
@@ -97,5 +94,3 @@ class nurbs_surface(B_spline_surface):
         line = np.zeros((3,2))
         line[:,0] = val; line[:,1] = val+n;
         ax.plot(line[0,:], line[1,:], line[2,:])
-        
-        plt.show()

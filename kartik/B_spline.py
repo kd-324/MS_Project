@@ -27,7 +27,6 @@ class B_spline(curve):
 
 
     def evaluate_basis(self, u):
-        pdb.set_trace()
         deg = self.degree
         t0 = self.find_knot(u)
         knot = self.knot[t0-deg:t0+deg+1]
@@ -50,6 +49,7 @@ class B_spline(curve):
 
 
     def evaluate(self, u):
+        deg = self.degree
         [t0, basis] = self.evaluate_basis(u)
         val = self.control_points[:,t0-deg:t0+1]
         ans = val.dot(basis)

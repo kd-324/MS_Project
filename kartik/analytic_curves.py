@@ -55,6 +55,7 @@ class circular_arc(curve):
 		center = np.matmul(np.linalg.inv(A),B)
 		self.centeroid = self.centeroid + center[0]*self.n1+center[1]*self.n2
 		self.scale = math.atan((center[1]+y1)/(center[0]+x1))
+		self.radius = np.sqrt((center[1]+y1)**2+(center[0]+x1)**2)
 		# if(center[0]+x1<0):
 		# 	self.scale += math.pi
 
@@ -62,7 +63,7 @@ class circular_arc(curve):
 	def evaluate(self, u):
 		u *= self.scale
 		sol = self.centeroid
-		sol += math.cos(u)*self.n1+math.sin(u)*self.n2
+		sol += self.radius*(math.cos(u)*self.n1+math.sin(u)*self.n2)
 		return sol
 
 
@@ -77,3 +78,23 @@ class circular_arc(curve):
 
 	def evaluate_derivatives(self, u):
 		pass
+
+
+class curve1(curve):
+	def __init__(self):
+		pass
+
+	def evaluate(self, u):
+		sol = np.array([2/np.sqrt(3)*np.sin(u/2), np.sin(u),0])
+		return sol
+
+	def evaluate_derivatives(self, u):
+		pass
+
+	def plot_data(self, ax, n=100):
+		cnt = 0
+		data = np.zeros((n,3))
+		for u in np.linspace(0,6.28,n):
+			data[cnt,:] = self.evaluate(u)
+			cnt += 1
+		ax.plot(data[:,0], data[:,1], data[:,2])
