@@ -33,6 +33,14 @@ class curve_object():
 		self.curves.append(NURBS_curve(cp, weight, der_req, deg))
 		self.kind.append('NURBS')
 
+	def add_polygon(self, cp):
+		n = cp.shape[0]
+		for i in range(n-1):
+			self.curves.append(line(cp[i:i+2,:]))
+			self.kind.append('line')
+		self.curves.append(line(np.array([cp[0,:],cp[n-1,:]])))
+		self.kind.append('line')
+
 	def plot_data(self):
 		fig = plt.figure()
 		ax = plt.axes(projection='3d')
