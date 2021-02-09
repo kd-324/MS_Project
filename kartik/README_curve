@@ -35,3 +35,7 @@ cp is an array of two points through which line is to be passed
 circular_arc(cp, der_req = 1)
 cp is array of three points, starting, arbitary, ending point. arbitary
 point is any point between the start and end point.
+
+add_polygon(cp)
+cp is numpy array of points. This adds lines joining adjacent points, 
+forming a polygon. 
