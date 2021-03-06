@@ -25,8 +25,8 @@ class curve_object():
 		self.curves.append(line(cp))
 		self.kind.append('line')
 
-	def add_B_spline(self, cp, der_req=2, deg=3):
-		self.curves.append(B_spline(cp, der_req, deg))
+	def add_B_spline(self, cp, der_req=2, deg=3, knot=[]):
+		self.curves.append(B_spline(cp, der_req, deg, knot=[]))
 		self.kind.append('B_spline')
 
 	def add_NURBS(self, cp, weight, der_req=2, deg=3):

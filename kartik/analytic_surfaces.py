@@ -105,26 +105,34 @@ class SOR(surface):
 
 
 class circular_disk(surface):
-	def __init__(self, radius):
+	def __init__(self, radius=1):
+		surface.__init__(self, 1, 1)
 		self.radius = radius
 		self.parts = []
 
 
 	def evaluate(self, n, u, v):
-		r = self.radius
 		if(n==4):
-			x = u*r-r/2; y = v*r-r/2;
-		else:
-			x = (u*r+r/2)*np.cos(np.pi*(v+n)/2); y = (u*r+r/2)*np.sin(np.pi*(v+n)/2);
+			return np.array([self.radius*u-self.radius/2, self.radius*v-self.radius/2,0])
+		th = np.pi*v/2-np.pi/4
+		r = self.radius*u/(2*np.cos(th))+self.radius*(1-u)
+		return np.array([r*np.cos(th+n*np.pi/2),r*np.sin(th+n*np.pi/2), 0])
 
-	def evaluate_derivative(self, u, v):
+
+	def evaluate_derivatives(self, u, v):
 		pass
 
 
-	def plot_data(self, ax):
-		data = np.zeros((101,101))
-		u = np.outer(np.linspace(0,1,101), np.ones(101)); v=u.T
-		for n in range(5):
-			for u in np.linspace(0,1,101):
-				for v in np.linspace(0,1,101):
-					data[i,j] = 
+	def plot_data(self, ax, n=100, m=100):
+		for k in range(5):
+			cnti = 0; cntj=0;
+			data = np.zeros((n+1,m+1,3))
+			for i in np.linspace(0,1,n+1):
+				for j in np.linspace(0,1,m+1):
+					data[cnti,cntj,:] = self.evaluate(k,i,j)
+					cntj = cntj+1
+				cntj = 0
+				cnti = cnti+1
+			ax.plot_surface(data[:,:,0],data[:,:,1], data[:,:,2])
+
+

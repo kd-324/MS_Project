@@ -33,4 +33,4 @@ class read_step_file:
 				for j in range(int(multiplicity[i])):
 					knot.append(float(distinct_knot[i]))
 			
-			self.spline_data.append({'deg': deg, 'cp': np.array(cp), 'knot': np.array(knot)})
+			self.spline_data.append({'deg': deg, 'cp': np.array(cp), 'knot': np.array(knot)/max(knot)})

@@ -10,8 +10,8 @@ from curve import *
 
 class line(curve):
 	def __init__(self, cp):
-		self.starting_point = cp[0]
-		self.ending_point = cp[1]
+		self.starting_point = cp[0,:]
+		self.ending_point = cp[1,:]
 		curve.__init__(self, 1)
 
 	def evaluate(self, u):

@@ -7,13 +7,16 @@ import pdb
 from curve import *
 
 class B_spline(curve):
-    def __init__(self, cp, der_req=2, deg=3, show_cp = False):
+    def __init__(self, cp, der_req=2, deg=3, knot=[], show_cp = False):
         curve.__init__(self, der_req)
         self.degree = deg
         self.control_points = cp.T
         self.show_cp = show_cp
         n = self.control_points.shape[1]
-        self.knot = [0 for i in range(0,deg)] + np.linspace(0,1,n-deg+1).tolist() + [1 for i in range(0,deg)]
+        if knot:
+            self.knot = knot.tolist()
+        else:
+            self.knot = [0 for i in range(0,deg)] + np.linspace(0,1,n-deg+1).tolist() + [1 for i in range(0,deg)]
         
 
     def find_knot(self, u):
