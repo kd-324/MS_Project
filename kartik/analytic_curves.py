@@ -38,6 +38,36 @@ class line(curve):
 		ax.plot3D(data[:,0],data[:,1], data[:,2])
 
 
+class circular_arc1(curve):
+	def __init__(self, center, radius, starting_angle, ending_angle):
+		curve.__init__(self, 2)
+		self.center = center; self.radius = radius;
+		self.starting_angle = starting_angle; self.ending_angle = ending_angle
+
+	def evaluate(self, u):
+		ans = np.zeros(2)
+		v = self.starting_angle+(self.ending_angle-self.starting_angle)*u
+		ans[0] = self.radius*np.cos(v); ans[1] = self.radius*np.sin(v)
+		return ans+self.center
+
+	def evaluate_derivatives(self, u):
+		ans = np.zeros((3,2))
+		k = self.ending_angle-self.starting_angle; r = self.radius
+		v = self.starting_angle+k*u
+		ans[0,0] = r*np.cos(v); ans[0,1] = r*np.sin(v)
+		ans[1,0] = -r*k*np.sin(v); ans[1,1] = r*k*np.cos(v)
+		ans[2,0] = -r*k*k*np.cos(v); ans[2,1] = -r*k*k*np.sin(v)
+		return ans
+
+	def plot_data(self, n=100):
+		data = np.zeros((n,2)); cnt=0;
+		for u in np.linspace(0,1, n):
+			data[cnt] = self.evaluate(u); cnt += 1
+		plt.plot(data[:,0],data[:,1])
+		plt.show()
+
+
+
 class circular_arc(curve):
 	def __init__(self, cp, der_req = 1):
 		curve.__init__(self, der_req)
@@ -106,7 +136,7 @@ class circular_arcn(NURBS_curve):
 		cp = np.array([[1,0,0],[1,2,0],[-1,2,0],[-1,0,0],[-1,-2,0],[1,-2,0],[1,0,0]],dtype=float)
 		weight = np.array([[1,1/3,1/3,1,1/3,1/3,1]],dtype=float)
 		knot = np.array([0,0,0,0,0.5,0.5,0.5,1,1,1,1],dtype=float)
-		NURBS_curve.__init__(self, cp, weight, 0, 3, knot)
+		NURBS_curve.__init__(self, cp, weight, 1, 3, knot)
 		angle1 = np.arccos(starting_point[0]/np.linalg.norm(starting_point))
 		if(starting_point[1]<0):
 			angle1 = 2*np.pi-angle1
@@ -120,3 +150,7 @@ class circular_arcn(NURBS_curve):
 	def evaluate(self, u):
 		v = u*self.scale
 		return NURBS_curve.evaluate(self, v)
+
+	def evaluate_derivatives(self, u):
+		v = u*self.scale
+		return NURBS_curve.evaluate_derivatives(self, v)
