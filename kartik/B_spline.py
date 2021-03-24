@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D
-import pdb
+import pdb;#pdb.set_trace()
 
 from curve import *
 
@@ -13,7 +13,7 @@ class B_spline(curve):
         self.control_points = cp.T
         self.show_cp = show_cp
         n = self.control_points.shape[1]
-        if knot:
+        if knot != []:
             self.knot = knot.tolist()
         else:
             self.knot = [0 for i in range(0,deg)] + np.linspace(0,1,n-deg+1).tolist() + [1 for i in range(0,deg)]

@@ -5,15 +5,24 @@ from mpl_toolkits.mplot3d import Axes3D
 import pdb
 
 class B_spline_surface:
-    def __init__(self, cp, n, m, deru=2, derv=2, deg1=3, deg2=3):
+    def __init__(self, cp, n, m, deru=2, derv=2, deg1=3, deg2=3, knot1 = [], knot2 = []):
         self.degree1 = deg1
         self.degree2 = deg2
         self.control_points = cp
         self.der_requ = deru
         self.der_reqv = derv
+        # if knot1 and knot2:
+        #     pass
+        # else:
         self.reshape(n, m)
-        self.knot1 = [0 for i in range(0,deg1)] + np.linspace(0,1,n-deg1+1).tolist() + [1 for i in range(0,deg1)]
-        self.knot2 = [0 for i in range(0,deg2)] + np.linspace(0,1,m-deg2+1).tolist() + [1 for i in range(0,deg2)]
+        if knot1 != []:
+            self.knot1 = knot1.tolist()
+        else:
+            self.knot1 = [0 for i in range(0,deg1)] + np.linspace(0,1,n-deg1+1).tolist() + [1 for i in range(0,deg1)]
+        if knot2 != []:
+            self.knot2 = knot2.tolist()
+        else:
+            self.knot2 = [0 for i in range(0,deg2)] + np.linspace(0,1,m-deg2+1).tolist() + [1 for i in range(0,deg2)]
 
 
     def reshape(self, n, m):
@@ -164,15 +173,15 @@ class B_spline_surface:
                 b = b+1
             a = a+1
         ax.plot_surface(new_data[0,0,0,:,:],new_data[1,0,0,:,:],new_data[2,0,0,:,:])
-        px = 60; py = 80;
-        val = new_data[:,0,0,px,py]
-        nu = new_data[:,1,0,px,py]; nv = new_data[:,0,1,px,py];
-        n = np.cross(nu,nv)
-        n /= np.linalg.norm(n)
-        nu /= np.linalg.norm(nu)
-        nv /= np.linalg.norm(nv)
-        line = np.zeros((3,2))
-        line[:,0] = val; line[:,1] = val+n;
-        ax.plot(line[0,:], line[1,:], line[2,:])
-        u,v = np.meshgrid(np.linspace(-0.5,0.5,101),np.linspace(-0.5,0.5,101))
-        ax.plot_surface(u+val[0],v+val[1],(-u*n[0]-v*n[1])/n[2]+val[2])
+        # px = 60; py = 80;
+        # val = new_data[:,0,0,px,py]
+        # nu = new_data[:,1,0,px,py]; nv = new_data[:,0,1,px,py];
+        # n = np.cross(nu,nv)
+        # n /= np.linalg.norm(n)
+        # nu /= np.linalg.norm(nu)
+        # nv /= np.linalg.norm(nv)
+        # line = np.zeros((3,2))
+        # line[:,0] = val; line[:,1] = val+n;
+        # ax.plot(line[0,:], line[1,:], line[2,:])
+        # u,v = np.meshgrid(np.linspace(-0.5,0.5,101),np.linspace(-0.5,0.5,101))
+        # ax.plot_surface(u+val[0],v+val[1],(-u*n[0]-v*n[1])/n[2]+val[2])

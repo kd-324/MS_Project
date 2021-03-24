@@ -6,6 +6,7 @@ import pdb
 import math
 
 from curve import *
+from NURBS_curve import *
 
 
 class line(curve):
@@ -98,3 +99,24 @@ class curve1(curve):
 			data[cnt,:] = self.evaluate(u)
 			cnt += 1
 		ax.plot(data[:,0], data[:,1], data[:,2])
+
+
+class circular_arcn(NURBS_curve):
+	def __init__(self, center, starting_point, ending_point):
+		cp = np.array([[1,0,0],[1,2,0],[-1,2,0],[-1,0,0],[-1,-2,0],[1,-2,0],[1,0,0]],dtype=float)
+		weight = np.array([[1,1/3,1/3,1,1/3,1/3,1]],dtype=float)
+		knot = np.array([0,0,0,0,0.5,0.5,0.5,1,1,1,1],dtype=float)
+		NURBS_curve.__init__(self, cp, weight, 0, 3, knot)
+		angle1 = np.arccos(starting_point[0]/np.linalg.norm(starting_point))
+		if(starting_point[1]<0):
+			angle1 = 2*np.pi-angle1
+		angle2 = np.arccos(ending_point[0]/np.linalg.norm(ending_point))
+		if(ending_point[1]<0):
+			angle2 = 2*np.pi-angle2
+		self.rotatez(angle1); self.translate(center);
+		self.scale = (angle2-angle1)/(2*np.pi)
+
+
+	def evaluate(self, u):
+		v = u*self.scale
+		return NURBS_curve.evaluate(self, v)
