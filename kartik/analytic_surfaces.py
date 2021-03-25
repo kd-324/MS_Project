@@ -136,3 +136,39 @@ class circular_disk(surface):
 			ax.plot_surface(data[:,:,0],data[:,:,1], data[:,:,2])
 
 
+class sphere(surface):
+	def __init__(self, center, radius):
+		self.center = center
+		self.radius = radius
+		surface.__init__(self,2,2)
+
+	def evaluate(self, i, u, v):
+		if (i<4):
+			rot = np.array([[1,0,0],[0,np.cos(np.pi*i/2),np.sin(np.pi*i/2)],[0,-np.sin(np.pi*i/2),np.cos(np.pi*i/2)]])
+		elif(i==4):
+			rot = np.array([[np.cos(np.pi/2),0,np.sin(np.pi/2)],[0,1,0],[-np.sin(np.pi/2),0,np.cos(np.pi/2)]])
+		else:
+			rot = np.array([[np.cos(-np.pi/2),0,np.sin(-np.pi/2)],[0,1,0],[-np.sin(-np.pi/2),0,np.cos(-np.pi/2)]])
+		u = np.pi*(u+0.5)/2; v = np.pi*(v+0.5)/2;
+		ans = np.zeros(3); r = self.radius;
+		ans[0] = r*np.cos(u); ans[1] = r*np.sin(u)*np.cos(v);
+		ans[2] = r*np.sin(u)*np.sin(v);
+		ans = np.matmul(rot, ans)
+		return ans
+
+	def evaluate_derivatives(self, u, v):
+		pass
+
+	def plot_data(self, ax, n=100, m=100):
+		cnti = 0; cntj=0;
+		data = np.zeros((n+1,m+1,3))
+		s_i = 0
+		for s_i in np.arange(6):
+			for i in np.linspace(0,1,n+1):
+				for j in np.linspace(0,1,m+1):
+					data[cnti,cntj,:] = self.evaluate(s_i,i,j)
+					cntj = cntj+1
+				cntj = 0
+				cnti = cnti+1
+			cnti = 0; cntj=0;
+			ax.plot_surface(data[:,:,0],data[:,:,1], data[:,:,2])
