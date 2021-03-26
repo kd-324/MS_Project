@@ -151,13 +151,29 @@ class sphere(surface):
 			rot = np.array([[np.cos(-np.pi/2),0,np.sin(-np.pi/2)],[0,1,0],[-np.sin(-np.pi/2),0,np.cos(-np.pi/2)]])
 		u = np.pi*(u+0.5)/2; v = np.pi*(v+0.5)/2;
 		ans = np.zeros(3); r = self.radius;
-		ans[0] = r*np.cos(u); ans[1] = r*np.sin(u)*np.cos(v);
-		ans[2] = r*np.sin(u)*np.sin(v);
+		ans[0] = r*np.cos(u); ans[1] = r*np.sin(u)*np.cos(v);ans[2] = r*np.sin(u)*np.sin(v);
 		ans = np.matmul(rot, ans)
 		return ans
 
-	def evaluate_derivatives(self, u, v):
-		pass
+	def evaluate_derivatives(self, i, u, v):
+		if (i<4):
+			rot = np.array([[1,0,0],[0,np.cos(np.pi*i/2),np.sin(np.pi*i/2)],[0,-np.sin(np.pi*i/2),np.cos(np.pi*i/2)]])
+		elif(i==4):
+			rot = np.array([[np.cos(np.pi/2),0,np.sin(np.pi/2)],[0,1,0],[-np.sin(np.pi/2),0,np.cos(np.pi/2)]])
+		else:
+			rot = np.array([[np.cos(-np.pi/2),0,np.sin(-np.pi/2)],[0,1,0],[-np.sin(-np.pi/2),0,np.cos(-np.pi/2)]])
+		u = np.pi*(u+0.5)/2; v = np.pi*(v+0.5)/2;
+		ans = np.zeros((3,3,3)); r = self.radius;
+		ans[0,0,0] = r*np.cos(u);  ans[0,0,1] =  r*np.sin(u)*np.cos(v); ans[0,0,2] =  r*np.sin(u)*np.sin(v);
+		ans[1,0,0] = -r*np.sin(u); ans[1,0,1] =  r*np.cos(u)*np.cos(v); ans[1,0,2] =  r*np.cos(u)*np.sin(v);
+		ans[0,1,0] = 0;            ans[0,1,1] = -r*np.sin(u)*np.sin(v); ans[0,1,2] =  r*np.sin(u)*np.cos(v);
+		ans[1,1,0] = 0;            ans[1,1,1] = -r*np.cos(u)*np.sin(v); ans[1,1,2] =  r*np.sin(u)*np.sin(v);
+		ans[2,0,0] = -r*np.cos(u); ans[2,0,1] = -r*np.sin(u)*np.cos(v); ans[2,0,2] = -r*np.sin(u)*np.sin(v);
+		ans[0,2,0] = 0;            ans[0,2,1] = -r*np.sin(u)*np.cos(v); ans[0,2,2] = -r*np.sin(u)*np.sin(v);
+		for l1 in np.arange(3):
+			for l2 in np.arange(3):
+				ans[l1,l2,:] = np.matmul(rot,ans[l1,l2,:])
+		return ans
 
 	def plot_data(self, ax, n=100, m=100):
 		cnti = 0; cntj=0;
@@ -172,3 +188,11 @@ class sphere(surface):
 				cnti = cnti+1
 			cnti = 0; cntj=0;
 			ax.plot_surface(data[:,:,0],data[:,:,1], data[:,:,2])
+		# for a1 in np.linspace(0.3,0.7,4):
+		# 	for a2 in np.linspace(0.3,0.7,4):
+		# 		data = self.evaluate_derivatives(0,a1,a2)
+		# 		slope = np.cross(data[1,0,:],data[0,1,:])
+		# 		slope /= np.linalg.norm(slope)
+		# 		x = data[0,0,0]+np.linspace(0,1,101)*slope[0]; y = data[0,0,1]+np.linspace(0,1,101)*slope[1];
+		# 		z =  data[0,0,2]+np.linspace(0,1,101)*slope[2];
+		# 		ax.plot(x,y,z)
